@@ -26,7 +26,7 @@ TRAIN_DIR = '/home/pi/myFaceRecognition/data/Train'
 VAL_DIR = '/home/pi/myFaceRecognition/data/Validation'
 NUM_EPOCHS = 1  # default 5
 BATCH_SIZE = 16
-NUM_CLASSES = 20  #TODO
+NUM_CLASSES = 19
 
 
 def load_model():
@@ -38,10 +38,7 @@ def load_model():
     x = Flatten()(base_out)
     x = Dense(256, activation='relu')(x)
     x = Dropout(0.5)(x)
-    x = Dense()(x)
-    # TODO: add a flatten layer, a dense layer with 256 units, a dropout layer with 0.5 rate,
-    # TODO: and another dense layer for output. The final layer should have the same number of units as classes
-    
+    predictions = Dense(NUM_CLASSES)(x)  # Simon explained that the number of classes is the number of options we have at the end: aka how many people did we take pics of?
     
     model = Model(inputs=base_model.input, outputs=predictions)
     print 'Build model'
@@ -49,6 +46,8 @@ def load_model():
 
     # TODO: compile the model, use SGD(lr=1e-4,momentum=0.9) for optimizer, 'categorical_crossentropy' for loss,
     # TODO: and ['accuracy'] for metrics
+
+    model.compile(optimizer = sgd, loss = 'categorical_crossentropy', metrics = ['accuracy'])
 
     print 'Compile model'
     return model
@@ -89,10 +88,12 @@ def main():
     X_train, Y_train = load_data(TRAIN_DIR)
     print 'Load val data:'
     X_val, Y_val = load_data(VAL_DIR)
-    # TODO: Train model
+    # TODO: Train modeli
 
+    model.fit(x=X_train, y=Y_train, batch_size=BATCH_SIZE, epochs=NUM_EPOCHS)
 
     # TODO: Save model weights
+    model.save('/home/pi/myFaceRecognition/data/save')
 
     print 'model weights saved.'
     return
