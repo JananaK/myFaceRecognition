@@ -90,7 +90,7 @@ def main():
     X_val, Y_val = load_data(VAL_DIR)
     # TODO: Train modeli
 
-    model.fit(x=X_train, y=Y_train, batch_size=BATCH_SIZE, epochs=NUM_EPOCHS)
+    model.fit(x=X_train, y=Y_train, batch_size=BATCH_SIZE, epochs=NUM_EPOCHS, validation_data = (X_val, Y_val))
 
     # TODO: Save model weights
     model.save('/home/pi/myFaceRecognition/data/save')
