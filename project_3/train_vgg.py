@@ -22,28 +22,32 @@ import random
 
 IMG_H, IMG_W, NUM_CHANNELS = 224, 224, 3
 MEAN_PIXEL = np.array([104., 117., 123.]).reshape((1,1,3))
-TRAIN_DIR = '../data/train'  #TODO
-VAL_DIR = '../data/validation'  #TODO
-NUM_EPOCHS = 5  #TODO
+TRAIN_DIR = '/home/pi/myFaceRecognition/data/Train'
+VAL_DIR = '/home/pi/myFaceRecognition/data/Validation'
+NUM_EPOCHS = 1  # default 5
 BATCH_SIZE = 16
-NUM_CLASSES = 20  #TODO
+NUM_CLASSES = 19
 
 
 def load_model():
-    # TODO: use VGG16 to load lower layers of vgg16 network and declare it as base_model
-    # TODO: use 'imagenet' for weights, include_top=False, (IMG_H, IMG_W, NUM_CHANNELS) for input_shape
+    keras.applications.vgg16.VGG16(include_top=False, weights='imagenet', input_shape = (IMG_H, IMG_W, NUM_CHANNELS))
 
     print('Model weights loaded.')
     base_out = base_model.output
-    # TODO: add a flatten layer, a dense layer with 256 units, a dropout layer with 0.5 rate,
-    # TODO: and another dense layer for output. The final layer should have the same number of units as classes
 
+    x = Flatten()(base_out)
+    x = Dense(256, activation='relu')(x)
+    x = Dropout(0.5)(x)
+    predictions = Dense(NUM_CLASSES)(x)  # Simon explained that the number of classes is the number of options we have at the end: aka how many people did we take pics of?
+    
     model = Model(inputs=base_model.input, outputs=predictions)
     print 'Build model'
     model.summary()
 
     # TODO: compile the model, use SGD(lr=1e-4,momentum=0.9) for optimizer, 'categorical_crossentropy' for loss,
     # TODO: and ['accuracy'] for metrics
+
+    model.compile(optimizer = sgd, loss = 'categorical_crossentropy', metrics = ['accuracy'])
 
     print 'Compile model'
     return model
@@ -84,10 +88,12 @@ def main():
     X_train, Y_train = load_data(TRAIN_DIR)
     print 'Load val data:'
     X_val, Y_val = load_data(VAL_DIR)
-    # TODO: Train model
+    # TODO: Train modeli
 
+    model.fit(x=X_train, y=Y_train, batch_size=BATCH_SIZE, epochs=NUM_EPOCHS, validation_data = (X_val, Y_val))
 
     # TODO: Save model weights
+    model.save('/home/pi/myFaceRecognition/data/save')
 
     print 'model weights saved.'
     return
