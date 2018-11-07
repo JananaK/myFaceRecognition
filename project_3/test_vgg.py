@@ -13,8 +13,12 @@ import glob, os, cv2
 from keras.models import Model, load_model
 from keras.utils.np_utils import to_categorical
 
+from keras.applications.vgg16 import VGG16
+from keras import optimizers
+from keras.layers import Dropout, Flatten, Dense
+
 TEST_DIR = '/home/ubuntu/myFaceRecognition/data/Test' 
-MODEL_PATH = '/home/ubuntu/myFaceRecognition/project_3/weights.py'
+MODEL_PATH = '/home/ubuntu/myFaceRecognition/project_3/weights.h5'
 IMG_H, IMG_W, NUM_CHANNELS = 224, 224, 3
 MEAN_PIXEL = np.array([104., 117., 123.]).reshape((1,1,3))
 BATCH_SIZE = 16
