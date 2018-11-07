@@ -13,12 +13,12 @@ import glob, os, cv2
 from keras.models import Model, load_model
 from keras.utils.np_utils import to_categorical
 
-TEST_DIR = '../data/test'  #TODO
-MODEL_PATH = '/home/ec2-user/vgg16_new_version_weights.h5' #TODO
+TEST_DIR = '/home/ubuntu/myFaceRecognition/data/Test' 
+MODEL_PATH = '/home/ubuntu/myFaceRecognition/project_3/weights.py'
 IMG_H, IMG_W, NUM_CHANNELS = 224, 224, 3
 MEAN_PIXEL = np.array([104., 117., 123.]).reshape((1,1,3))
 BATCH_SIZE = 16
-NUM_CLASSES = 20  #TODO
+NUM_CLASSES = 19
 
 
 def load_data(src_path):
@@ -45,11 +45,26 @@ def load_data(src_path):
 
 def main():
     # TODO: load model
+    base_model = VGG16(include_top=False, weights='imagenet', input_shape = (IMG_H, IMG_W, NUM_CHANNELS))
+    print('Model weights loaded.')
+    base_out = base_model.output
+
+    x = Flatten()(base_out)
+    x = Dense(256, activation='relu')(x)
+    x = Dropout(0.5)(x)
+    predictions = Dense(NUM_CLASSES)(x)  # Simon explained that the number of classes is the number of options we have at the end: aka how many people did we take pics of?
+    
+    model = Model(inputs=base_model.input, outputs=predictions)
+    print 'Build model'
+    model.summary()
+    model.compile(optimizer = optimizers.SGD(lr=1e-4,momentum=0.9), loss = 'categorical_crossentropy', metrics = ['accuracy'])
+    print 'Compile model'
 
     # compute test accuracy
     print 'Load test data:'
     X_test, Y_test = load_data(TEST_DIR)
     # TODO: get accuracy
+    model.evaluate(x=X_test, y=Y_test, batch_size = BATCH_SIZE, verbose=1, sample_weight=None, steps=BATCH_SIZE)
 
     return
 
