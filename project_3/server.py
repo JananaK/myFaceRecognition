@@ -79,7 +79,7 @@ def classify(path_to_image):
     prediction = {'label': str(label),
                   'confidence': float(conf)}
 
-    return 
+    return prediction 
 
 @app.route('/')
 def index():
@@ -136,7 +136,7 @@ def get_person(person):
     # Respond to the request (Send prediction back to Pi)    
     return prediction_json
 
-@app.route('/predict')
+@app.route('/predict', methods=['POST'])
 def predict():
     """Receives an image, classifies the image, and responds with the label."""
     
