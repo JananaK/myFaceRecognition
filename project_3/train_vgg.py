@@ -22,15 +22,19 @@ import random
 
 IMG_H, IMG_W, NUM_CHANNELS = 224, 224, 3
 MEAN_PIXEL = np.array([104., 117., 123.]).reshape((1,1,3))
-TRAIN_DIR = '/home/pi/myFaceRecognition/data/Train'
-VAL_DIR = '/home/pi/myFaceRecognition/data/Validation'
+TRAIN_DIR = '/home/ubuntu/myFaceRecognition/data/Train'
+VAL_DIR = '/home/ubuntu/myFaceRecognition/data/Validation'
 NUM_EPOCHS = 1  # default 5
 BATCH_SIZE = 16
 NUM_CLASSES = 19
 
 
 def load_model():
-    keras.applications.vgg16.VGG16(include_top=False, weights='imagenet', input_shape = (IMG_H, IMG_W, NUM_CHANNELS))
+
+
+    #fh = open(TRAIN_DIR, "r")
+
+    base_model = VGG16(include_top=False, weights='imagenet', input_shape = (IMG_H, IMG_W, NUM_CHANNELS))
 
     print('Model weights loaded.')
     base_out = base_model.output
@@ -47,7 +51,7 @@ def load_model():
     # TODO: compile the model, use SGD(lr=1e-4,momentum=0.9) for optimizer, 'categorical_crossentropy' for loss,
     # TODO: and ['accuracy'] for metrics
 
-    model.compile(optimizer = sgd, loss = 'categorical_crossentropy', metrics = ['accuracy'])
+    model.compile(optimizer = optimizers.SGD(lr=1e-4,momentum=0.9), loss = 'categorical_crossentropy', metrics = ['accuracy'])
 
     print 'Compile model'
     return model
@@ -93,7 +97,7 @@ def main():
     model.fit(x=X_train, y=Y_train, batch_size=BATCH_SIZE, epochs=NUM_EPOCHS, validation_data = (X_val, Y_val))
 
     # TODO: Save model weights
-    model.save('/home/pi/myFaceRecognition/data/save')
+    model.save('weights.h5')
 
     print 'model weights saved.'
     return
