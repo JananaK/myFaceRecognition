@@ -29,7 +29,7 @@ def request_from_server(img):
     :returns: Returns a dictionary containing label and cofidence.
     """
     # URL or PUBLIC DNS to your server
-    URL = "http://34.220.48.214:8080/"
+    URL = "http://34.221.99.140:8080/"
     
     # File name so that it can be temporarily stored.
     temp_image_name = 'temp.jpg'
@@ -125,10 +125,11 @@ def main():
                 break
         
             # Delete image in variable so we can get the next frame
-            rawCapture.truncate(0)
+        rawCapture.truncate(0)
         
-            print('Waiting for image...')
-            time.sleep(1)
+        print('Waiting for image...')
+        time.sleep(1)
+
 
 # Runs main if this file is run directly
 if(__name__ == '__main__'):
