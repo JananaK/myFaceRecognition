@@ -107,10 +107,8 @@ def main():
                 
                 # TODO: Get label and confidence using request_from_server
                 dictionary = request_from_server(faces)
-
-	        label = dictionary['label']  
+                label = dictionary['label']  
 	        confidence = dictionary['confidence']  
-
                 print('New result found!')
 
                 # TODO: Display label on face image
