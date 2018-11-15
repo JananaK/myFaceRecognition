@@ -29,7 +29,7 @@ def request_from_server(img):
     :returns: Returns a dictionary containing label and cofidence.
     """
     # URL or PUBLIC DNS to your server
-    URL = "ssh -i \"Part8Instance.pem\" ubuntu@ec2-54-245-187-228.us-west-2.compute.amazonaws.com"
+    URL = "http://34.220.48.214:8080/"
  
     # File name so that it can be temporarily stored.
     temp_image_name = 'temp.jpg'
@@ -75,60 +75,60 @@ def main():
     # 2. Detect a face, display it, and get confirmation from user.
     for frame in camera.capture_continuous(rawCapture, format='bgr', use_video_port=True):
         
-    # Get image array from frame
-    # grab the raw NumPy array representing the image, then initialize the timestamp
-    # and occupied/unoccupied text
-    frame = frame.array
-    img = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    	# Get image array from frame
+    	# grab the raw NumPy array representing the image, then initialize the timestamp
+    	# and occupied/unoccupied text
+    	frame = frame.array
+    	img = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-    # TODO: Use face detector to get faces.
-    # Be sure to save the faces in a variable called 'faces'
+        # TODO: Use face detector to get faces.
+        # Be sure to save the faces in a variable called 'faces'
 
-    faces = face_cascade.detectMultiScale(img, 1.3, 5)
+    	faces = face_cascade.detectMultiScale(img, 1.3, 5)
 
-    for (x, y, w, h) in faces:
-	cv2.rectangle(faces,(x,y),(x+w,y+h),(255,255,255),2)
+    	for (x, y, w, h) in faces:
+	    cv2.rectangle(faces,(x,y),(x+w,y+h),(255,255,255),2)
            
-	faces = faces[y:y+h, x:x+w]
+	    faces = faces[y:y+h, x:x+w]
 
-	print('==================================')
-        print('Face detected!')
-        cv2.imshow('Face Image for Classification', frame)
-            
-        # Keep showing image until a key is pressed
-        cv2.waitKey()
-        answer = input('Confirm image (1-yes / 0-no): ')
-        print('==================================')
-
-        if(answer == 1):
-            print('Let\'s see who you are...')
-                
-            # TODO: Get label and confidence using request_from_server
-            predictions = request_from_server(faces)
-
-	    label = predictions['label']  
-	    confidence = predictions['confidence']  
-                
-            print('New result found!')
-
-            # TODO: Display label on face image
-            # Save what you want to write on image to 'result_to_display'
-            # [OPTIONAL]: At this point you only have a number to display, 
-            # you could add some extra code to convert your number to a 
-            # name
-
-	    person = people[label]
-
-            cv2.putText(frame, str("Hi " + person), (10, 30), FONT, 1, (0, 255, 0), 2)
+	    print('==================================')
+            print('Face detected!')
             cv2.imshow('Face Image for Classification', frame)
+            
+            # Keep showing image until a key is pressed
             cv2.waitKey()
-            break
+            answer = input('Confirm image (1-yes / 0-no): ')
+            print('==================================')
+
+            if(answer == 1):
+                print('Let\'s see who you are...')
+                
+                # TODO: Get label and confidence using request_from_server
+                predictions = request_from_server(faces)
+
+	        label = predictions['label']  
+	        confidence = predictions['confidence']  
+                
+                print('New result found!')
+
+                # TODO: Display label on face image
+                # Save what you want to write on image to 'result_to_display'
+                # [OPTIONAL]: At this point you only have a number to display, 
+                # you could add some extra code to convert your number to a 
+                # name
+
+	        person = people[label]
+
+                cv2.putText(frame, str("Hi " + person), (10, 30), FONT, 1, (0, 255, 0), 2)
+                cv2.imshow('Face Image for Classification', frame)
+                cv2.waitKey()
+                break
         
-        # Delete image in variable so we can get the next frame
-        rawCapture.truncate(0)
+            # Delete image in variable so we can get the next frame
+            rawCapture.truncate(0)
         
-        print('Waiting for image...')
-        time.sleep(1)
+            print('Waiting for image...')
+            time.sleep(1)
 
 # Runs main if this file is run directly
 if(__name__ == '__main__'):

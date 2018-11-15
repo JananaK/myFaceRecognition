@@ -177,7 +177,7 @@ def predict():
         
 def main(args):
     app.run(host='0.0.0.0', port=args.port, threaded=False, 
-        debug=args.debug, ssl_context=args.ssl)
+        debug=args.debug, ssl_context=None)
 
 
 if(__name__ == "__main__"):
