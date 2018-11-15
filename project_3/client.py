@@ -48,8 +48,12 @@ def request_from_server(img):
     # Sending post request and saving the response as response object
     response = requests.post(url = URL, json = payload)
      
+    print 'We are getting the prediction...'
+
     # Get prediction from response
     prediction = response.json()
+
+    print 'We have the prediction'
 
     return prediction
 
