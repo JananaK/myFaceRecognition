@@ -29,7 +29,7 @@ def request_from_server(img):
     :returns: Returns a dictionary containing label and cofidence.
     """
     # URL or PUBLIC DNS to your server
-    URL = "http://34.221.99.140:8080/"
+    URL = "http://34.219.182.193:8080/"
     
     # File name so that it can be temporarily stored.
     temp_image_name = 'temp.jpg'
