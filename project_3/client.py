@@ -29,10 +29,7 @@ def request_from_server(img):
     :returns: Returns a dictionary containing label and cofidence.
     """
     # URL or PUBLIC DNS to your server
- 
-   # URL = "ssh -i \"Part8Instance.pem\" ubuntu@ec2-54-245-187-228.us-west-2.compute.amazonaws.com"
-    URL = "https://ec2-18-236-116-61.us-west-2.compute.amazonaws.com:8080"
-
+    URL = "http://34.220.48.214:8080/"
     
     # File name so that it can be temporarily stored.
     temp_image_name = 'temp.jpg'
@@ -89,9 +86,9 @@ def main():
         # TODO: Use face detector to get faces.
         # Be sure to save the faces in a variable called 'faces'
 
-        faces = face_cascade.detectMultiScale(img, 1.3, 5)
+    	faces = face_cascade.detectMultiScale(img, 1.3, 5)
 
-        for (x, y, w, h) in faces:
+    	for (x, y, w, h) in faces:
 	    cv2.rectangle(faces,(x,y),(x+w,y+h),(255,255,255),2)
            
 	    faces = faces[y:y+h, x:x+w]
@@ -113,7 +110,7 @@ def main():
 
 	        label = dictionary['label']  
 	        confidence = dictionary['confidence']  
-                
+
                 print('New result found!')
 
                 # TODO: Display label on face image
@@ -130,10 +127,10 @@ def main():
                 break
         
             # Delete image in variable so we can get the next frame
-        rawCapture.truncate(0)
+            rawCapture.truncate(0)
         
-        print('Waiting for image...')
-        time.sleep(1)
+            print('Waiting for image...')
+            time.sleep(1)
 
 # Runs main if this file is run directly
 if(__name__ == '__main__'):
